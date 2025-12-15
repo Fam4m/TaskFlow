@@ -2844,3 +2844,255 @@ body,
     background: var(--accent-hover);
     transform: scale(1.02);
 }
+
+/* ===================================
+   Mobile Responsive Design
+   ================================== */
+
+/* Tablet and below */
+@media (max-width: 768px) {
+    .app-container {
+        padding: var(--space-3);
+    }
+
+    header {
+        flex-wrap: wrap;
+        gap: var(--space-3);
+    }
+
+    .logo {
+        font-size: 1.25rem;
+    }
+
+    .tab-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-btn {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.8125rem;
+        white-space: nowrap;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .habits-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .review-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .modal {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .modal-body {
+        max-height: 60vh;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    :root {
+        --space-4: 0.75rem;
+        --space-5: 1rem;
+        --space-6: 1.25rem;
+    }
+
+    .app-container {
+        padding: var(--space-2);
+    }
+
+    header {
+        padding: var(--space-3);
+    }
+
+    .header-actions {
+        gap: var(--space-2);
+    }
+
+    .tab-nav {
+        padding: var(--space-2);
+        gap: var(--space-1);
+    }
+
+    .tab-btn {
+        padding: var(--space-2);
+        font-size: 0.75rem;
+    }
+
+    .main-content {
+        padding: var(--space-3);
+    }
+
+    /* Task Input */
+    .task-input-container {
+        padding: var(--space-3);
+    }
+
+    .minimal-input {
+        font-size: 1rem;
+    }
+
+    /* Task Cards */
+    .task-card {
+        padding: var(--space-3);
+    }
+
+    .task-title {
+        font-size: 0.9375rem;
+    }
+
+    .task-meta {
+        flex-wrap: wrap;
+        gap: var(--space-2);
+    }
+
+    /* Filters */
+    .filter-group {
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.75rem;
+    }
+
+    /* Habits */
+    .habits-stats {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--space-2);
+    }
+
+    .habit-stat-card {
+        padding: var(--space-3);
+    }
+
+    .habit-stat-value {
+        font-size: 1.5rem;
+    }
+
+    .habit-stat-label {
+        font-size: 0.625rem;
+    }
+
+    .habit-input {
+        flex-direction: column;
+    }
+
+    .habit-days-select {
+        width: 100%;
+    }
+
+    .habit-item {
+        padding: var(--space-3);
+        gap: var(--space-2);
+    }
+
+    .weekly-habit-row {
+        flex-wrap: wrap;
+    }
+
+    .weekly-habit-name {
+        flex: none;
+        width: 100%;
+        margin-bottom: var(--space-1);
+    }
+
+    /* Heatmap */
+    .habit-heatmap {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    /* Analytics */
+    .stat-card {
+        padding: var(--space-3);
+    }
+
+    .chart-container {
+        height: 150px;
+    }
+
+    /* Calendar/Tracker */
+    .calendar-day {
+        min-height: 40px;
+        font-size: 0.75rem;
+    }
+
+    /* Modals */
+    .modal {
+        width: 100%;
+        max-width: 100%;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        max-height: 85vh;
+    }
+
+    .modal-header,
+    .review-header {
+        padding: var(--space-3);
+    }
+
+    .modal-body,
+    .review-content {
+        padding: var(--space-3);
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    /* Review Modal */
+    .score-circle {
+        width: 100px;
+        height: 100px;
+    }
+
+    .score-circle::before {
+        width: 75px;
+        height: 75px;
+    }
+
+    .score-value {
+        font-size: 2rem;
+    }
+
+    .review-stat-value {
+        font-size: 1.25rem;
+    }
+
+    /* Timeline */
+    .timeline-item {
+        padding-left: var(--space-4);
+    }
+
+    .subtask-timeline-container {
+        margin-left: var(--space-3);
+    }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+    .tab-btn {
+        padding: var(--space-1) var(--space-2);
+        font-size: 0.6875rem;
+    }
+
+    .habits-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .review-stats {
+        grid-template-columns: 1fr;
+    }
+}
