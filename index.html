@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A premium task tracking application to manage your goals and track progress over time">
+    <meta name="theme-color" content="#ff7733">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>TaskFlow - Track Your Progress</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Minimal Header -->
+        <header class="header">
+            <h1 class="logo">TaskFlow</h1>
+            <div class="header-actions">
+                <div class="stat-pill">
+                    <span class="stat-value" id="total-tasks">0</span>
+                    <span class="stat-divider">/</span>
+                    <span class="stat-value completed" id="completed-tasks">0</span>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="theme-toggle" title="Toggle theme (T)">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <!-- Settings Menu -->
+                <div class="settings-menu">
+                    <button class="settings-toggle" id="settings-toggle" title="Settings">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="settings-dropdown" id="settings-dropdown">
+                        <button class="settings-item" id="export-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Export Data
+                        </button>
+                        <button class="settings-item" id="import-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Import Data
+                        </button>
+                    </div>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                </div>
+            </div>
+        </header>
+
+        <!-- Sleek Tab Navigation -->
+        <nav class="tab-nav">
+            <div class="tab-slider" id="tab-slider"></div>
+            <button class="tab-btn active" data-tab="tasks">Tasks</button>
+            <button class="tab-btn" data-tab="timeline">Timeline</button>
+            <button class="tab-btn" data-tab="analytics">Analytics</button>
+            <button class="tab-btn" data-tab="overview">Overview</button>
+            <button class="tab-btn" data-tab="habits">Habits</button>
+            <button class="tab-btn" data-tab="tracker">Tracker</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tasks Tab -->
+            <section class="tab-content active" id="tasks-tab">
+                <!-- Minimal Task Input -->
+                <div class="task-input-container">
+                    <form id="task-form" class="task-input">
+                        <input type="text" id="task-title" placeholder="Add a new task..." required>
+                        <div class="input-actions">
+                            <select id="task-priority" class="mini-select">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                            <select id="task-category" class="mini-select">
+                                <option value="personal">Personal</option>
+                                <option value="work">Work</option>
+                                <option value="health">Health</option>
+                                <option value="learning">Learning</option>
+                            </select>
+                            <button type="submit" class="btn-add">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-input" class="search-input" placeholder="Search tasks... (press /)">
+                    <button type="button" class="search-clear" id="search-clear" title="Clear search (Esc)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Minimal Filters -->
+                <div class="filters">
+                    <button class="filter-chip active" data-filter="all">All</button>
+                    <button class="filter-chip" data-filter="active">Active</button>
+                    <button class="filter-chip" data-filter="completed">Done</button>
+                </div>
+
+                <!-- Task List -->
+                <div class="task-list" id="task-list">
+                    <div class="empty-state" id="empty-state">
+                        <div class="empty-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M9 11l3 3L22 4"></path>
+                                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                            </svg>
+                        </div>
+                        <p>No tasks yet. Start by adding one above.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timeline Tab -->
+            <section class="tab-content" id="timeline-tab">
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <h2>Project Timelines</h2>
+                        <div class="timeline-legend">
+                            <span class="legend-dot overdue"></span><span>Overdue</span>
+                            <span class="legend-dot today"></span><span>Due Today</span>
+                            <span class="legend-dot upcoming"></span><span>Upcoming</span>
+                            <span class="legend-dot done"></span><span>Done</span>
+                        </div>
+                    </div>
+                    <div class="project-timelines" id="project-timelines">
+                        <div class="timeline-empty" id="timeline-empty">
+                            <p>Add subtasks with due dates to see project timelines.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Tab -->
+            <section class="tab-content" id="analytics-tab">
+                <div class="analytics-container">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h2>Progress Trend</h2>
+                            <span class="chart-period">Last 7 days</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="progress-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="metrics-row">
+                        <div class="metric-card">
+                            <span class="metric-value" id="streak-count">0</span>
+                            <span class="metric-label">Day Streak</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value" id="tasks-today">0</span>
+                            <span class="metric-label">Completed Today</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value" id="avg-progress">0%</span>
+                            <span class="metric-label">Avg Progress</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Overview Tab -->
+            <section class="tab-content" id="overview-tab">
+                <div class="overview-container">
+                    <div class="overview-main">
+                        <div class="progress-circle-container">
+                            <svg class="progress-circle" viewBox="0 0 120 120">
+                                <defs>
+                                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#ff9966" />
+                                        <stop offset="100%" stop-color="#ff7733" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="progress-bg" cx="60" cy="60" r="52" />
+                                <circle class="progress-value" cx="60" cy="60" r="52" id="progress-ring" />
+                            </svg>
+                            <div class="progress-text">
+                                <span class="progress-number" id="ring-progress">0</span>
+                                <span class="progress-percent">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-grid">
+                        <div class="stat-card">
+                            <h3>By Priority</h3>
+                            <div class="priority-stats">
+                                <div class="priority-row high">
+                                    <span class="priority-dot"></span>
+                                    <span class="priority-name">High</span>
+                                    <div class="priority-bar-track">
+                                        <div class="priority-bar-fill" id="high-priority-bar"></div>
+                                    </div>
+                                    <span class="priority-num" id="high-count">0</span>
+                                </div>
+                                <div class="priority-row medium">
+                                    <span class="priority-dot"></span>
+                                    <span class="priority-name">Medium</span>
+                                    <div class="priority-bar-track">
+                                        <div class="priority-bar-fill" id="medium-priority-bar"></div>
+                                    </div>
+                                    <span class="priority-num" id="medium-count">0</span>
+                                </div>
+                                <div class="priority-row low">
+                                    <span class="priority-dot"></span>
+                                    <span class="priority-name">Low</span>
+                                    <div class="priority-bar-track">
+                                        <div class="priority-bar-fill" id="low-priority-bar"></div>
+                                    </div>
+                                    <span class="priority-num" id="low-count">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>By Category</h3>
+                            <div class="category-stats" id="category-list">
+                                <!-- Categories inserted dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Habits Tab -->
+            <section class="tab-content" id="habits-tab">
+                <div class="habits-container">
+                    <!-- Today's Habits -->
+                    <div class="today-habits">
+                        <h2 class="section-title">Today's Habits</h2>
+                        <div class="habits-checklist" id="habits-checklist">
+                            <!-- Habits inserted dynamically -->
+                        </div>
+                        <div class="habits-empty" id="habits-empty">
+                            <div class="empty-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <path
+                                        d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
+                                    </path>
+                                </svg>
+                            </div>
+                            <p>No habits yet. Add your first daily habit!</p>
+                        </div>
+                    </div>
+
+                    <!-- Add Habit -->
+                    <div class="add-habit-section">
+                        <form id="habit-form" class="habit-input">
+                            <input type="text" id="habit-title" placeholder="Add a new habit..." required>
+                            <select id="habit-days-per-week" class="habit-days-select" title="Days per week">
+                                <option value="7">Daily</option>
+                                <option value="6">6x/week</option>
+                                <option value="5">5x/week</option>
+                                <option value="4">4x/week</option>
+                                <option value="3">3x/week</option>
+                                <option value="2">2x/week</option>
+                                <option value="1">1x/week</option>
+                            </select>
+                            <button type="submit" class="btn-add-habit">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Habits Stats -->
+                    <div class="habits-stats">
+                        <div class="habit-stat-card">
+                            <span class="habit-stat-value" id="total-habits">0</span>
+                            <span class="habit-stat-label">Total Habits</span>
+                        </div>
+                        <div class="habit-stat-card">
+                            <span class="habit-stat-value" id="completed-today">0</span>
+                            <span class="habit-stat-label">Done Today</span>
+                        </div>
+                        <div class="habit-stat-card">
+                            <span class="habit-stat-value" id="best-streak">0</span>
+                            <span class="habit-stat-label">Best Streak</span>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Chart -->
+                    <div class="habit-analytics-section">
+                        <h3 class="analytics-title">This Week</h3>
+                        <div class="weekly-chart" id="habit-weekly-chart">
+                            <!-- Dynamic weekly bars -->
+                        </div>
+                    </div>
+
+                    <!-- Completion Heatmap -->
+                    <div class="habit-analytics-section">
+                        <h3 class="analytics-title">Last 30 Days</h3>
+                        <div class="habit-heatmap" id="habit-heatmap">
+                            <!-- Dynamic heatmap cells -->
+                        </div>
+                        <div class="heatmap-legend">
+                            <span>Less</span>
+                            <div class="heatmap-legend-cells">
+                                <div class="heatmap-cell level-0"></div>
+                                <div class="heatmap-cell level-1"></div>
+                                <div class="heatmap-cell level-2"></div>
+                                <div class="heatmap-cell level-3"></div>
+                                <div class="heatmap-cell level-4"></div>
+                            </div>
+                            <span>More</span>
+                        </div>
+                    </div>
+
+                    <!-- Per-Habit Breakdown -->
+                    <div class="habit-analytics-section" id="per-habit-section">
+                        <h3 class="analytics-title">Habit Breakdown</h3>
+                        <div class="habit-breakdown" id="habit-breakdown">
+                            <!-- Dynamic habit stats -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tracker Tab -->
+            <section class="tab-content" id="tracker-tab">
+                <div class="tracker-container">
+                    <div class="tracker-header">
+                        <button class="tracker-nav-btn" onclick="navigateMonth(-1)" title="Previous Month">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="15,18 9,12 15,6"></polyline>
+                            </svg>
+                        </button>
+                        <h2 id="tracker-month-label">December 2025</h2>
+                        <button class="tracker-nav-btn" onclick="navigateMonth(1)" title="Next Month">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="9,18 15,12 9,6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="calendar-wrapper">
+                        <div class="weekday-header">
+                            <span>Sun</span>
+                            <span>Mon</span>
+                            <span>Tue</span>
+                            <span>Wed</span>
+                            <span>Thu</span>
+                            <span>Fri</span>
+                            <span>Sat</span>
+                        </div>
+                        <div class="calendar-grid" id="calendar-grid">
+                            <!-- Calendar days inserted dynamically -->
+                        </div>
+                    </div>
+                    <div class="tracker-stats">
+                        <div class="tracker-stat-card">
+                            <span class="tracker-stat-value" id="tracker-streak">0</span>
+                            <span class="tracker-stat-label">Current Streak</span>
+                        </div>
+                        <div class="tracker-stat-card">
+                            <span class="tracker-stat-value" id="tracker-month-total">0</span>
+                            <span class="tracker-stat-label">Days This Month</span>
+                        </div>
+                        <div class="tracker-stat-card">
+                            <span class="tracker-stat-value" id="tracker-total">0</span>
+                            <span class="tracker-stat-label">Total Check-ins</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Edit Task</h2>
+                <button class="modal-close" id="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="edit-form" class="modal-form">
+                <input type="hidden" id="edit-task-id">
+                <div class="form-field">
+                    <label for="edit-title">Title</label>
+                    <input type="text" id="edit-title" required>
+                </div>
+                <div class="form-field">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" rows="2" placeholder="Optional description..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="edit-priority">Priority</label>
+                        <select id="edit-priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="edit-category">Category</label>
+                        <select id="edit-category">
+                            <option value="personal">Personal</option>
+                            <option value="work">Work</option>
+                            <option value="health">Health</option>
+                            <option value="learning">Learning</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="edit-due-date">Due Date</label>
+                        <input type="date" id="edit-due-date">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="edit-recurrence">Repeat</label>
+                        <select id="edit-recurrence">
+                            <option value="none">None</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="subtasks-section">
+                    <div class="subtasks-header">
+                        <label>Subtasks</label>
+                        <button type="button" class="btn-text" id="add-subtask-btn">+ Add</button>
+                    </div>
+                    <div class="subtasks-list" id="edit-subtasks">
+                        <!-- Subtasks inserted dynamically -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="cancel-edit">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Day Checklist Modal -->
+    <div class="modal-overlay" id="day-checklist-modal">
+        <div class="modal day-checklist">
+            <div class="modal-header">
+                <h2 id="day-checklist-date">December 15, 2025</h2>
+                <button class="modal-close" id="day-checklist-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="day-checklist-body">
+                <p class="day-checklist-label">What did you work on today?</p>
+                <div class="day-checklist-items" id="day-checklist-items">
+                    <!-- Project checkboxes inserted dynamically -->
+                </div>
+                <div class="day-checklist-empty" id="day-checklist-empty">
+                    <p>No active projects. Add some tasks to get started!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal-overlay" id="review-modal">
+        <div class="modal review-modal">
+            <div class="review-header">
+                <h2 id="review-title">Daily Review</h2>
+                <button class="modal-close" id="review-close">&times;</button>
+            </div>
+            <div class="review-content">
+                <!-- Productivity Score -->
+                <div class="productivity-score">
+                    <div class="score-circle" id="score-circle">
+                        <span class="score-value" id="score-value">0</span>
+                    </div>
+                    <div class="score-label">Productivity Score</div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="review-stats" id="review-stats">
+                    <!-- Dynamic stats -->
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="review-section" id="category-section">
+                    <h3>Category Breakdown</h3>
+                    <div class="category-chart" id="review-category-chart">
+                        <!-- Dynamic chart -->
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="review-section" id="achievements-section">
+                    <h3>Highlights</h3>
+                    <div class="achievements-list" id="review-achievements">
+                        <!-- Dynamic achievements -->
+                    </div>
+                </div>
+            </div>
+            <div class="review-footer">
+                <button class="btn-primary" id="review-dismiss">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('TaskFlow PWA ready!', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>

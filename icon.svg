@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff9966"/>
+      <stop offset="100%" stop-color="#ff7733"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative ring -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="rgba(255,119,51,0.1)" stroke-width="40"/>
+  
+  <!-- Checkmark circle background -->
+  <circle cx="256" cy="256" r="120" fill="rgba(255,119,51,0.15)"/>
+  
+  <!-- Checkmark -->
+  <path d="M180 260 L230 310 L340 200" 
+        fill="none" 
+        stroke="url(#accentGrad)" 
+        stroke-width="32" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+  
+  <!-- Small decorative dots -->
+  <circle cx="380" cy="140" r="12" fill="#ff7733" opacity="0.6"/>
+  <circle cx="420" cy="200" r="8" fill="#ff9966" opacity="0.4"/>
+  <circle cx="100" cy="380" r="10" fill="#ff7733" opacity="0.5"/>
+</svg>
